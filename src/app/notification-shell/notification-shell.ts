@@ -1,3 +1,4 @@
+// notification-shell.component.ts
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Header } from "../header/header";
@@ -15,7 +16,6 @@ export class NotificationShell implements OnInit, OnDestroy {
   notifications: NotificationData[] = [];
   private notificationsSubscription!: Subscription;
 
-  // Correct injection
   private notificationService = inject(NotificationService);
 
   ngOnInit(): void {
@@ -34,11 +34,20 @@ export class NotificationShell implements OnInit, OnDestroy {
     this.notificationService.initializeNotificationListener();
   }
 
-  // Get non-message notifications for display
-  get nonMessageNotifications(): NotificationData[] {
-    return this.notifications.filter(notification => 
-      notification.type !== 'message'
-    );
+  // Get all notifications sorted by timestamp (newest first)
+  get sortedNotifications(): NotificationData[] {
+    return this.notifications
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  // Get unread notifications
+  get unreadNotifications(): NotificationData[] {
+    return this.sortedNotifications.filter(notification => !notification.read);
+  }
+
+  // Get read notifications
+  get readNotifications(): NotificationData[] {
+    return this.sortedNotifications.filter(notification => notification.read);
   }
 
   // Mark notification as read
@@ -46,24 +55,52 @@ export class NotificationShell implements OnInit, OnDestroy {
     this.notificationService.markAsRead(notification.id);
   }
 
+  // Mark all as read
+  markAllAsRead(): void {
+    this.notificationService.markAllAsRead();
+  }
+
   // Clear all notifications
   clearAllNotifications(): void {
     this.notificationService.clearAllNotifications();
   }
 
-  // Get unread count for non-message notifications
-  get unreadNonMessageCount(): number {
-    return this.nonMessageNotifications.filter(notification => !notification.read).length;
+  // Get unread count
+  get unreadCount(): number {
+    return this.unreadNotifications.length;
   }
 
   // Format timestamp for display
   formatTimestamp(timestamp: string): string {
-    return new Date(timestamp).toLocaleString();
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+
+    if (diffInHours < 1) {
+      return 'Just now';
+    } else if (diffInHours < 24) {
+      return `${Math.floor(diffInHours)} hours ago`;
+    } else if (diffInHours < 48) {
+      return 'Yesterday';
+    } else {
+      return date.toLocaleDateString();
+    }
   }
 
   // Get notification icon
   getNotificationIcon(type: NotificationData['type']): string {
     return this.notificationService.getNotificationIcon(type);
+  }
+
+  // Get notification type display name
+  getNotificationTypeDisplay(type: NotificationData['type']): string {
+    const typeMap = {
+      message: 'Message',
+      system: 'System',
+      friend_request: 'Friend Request',
+      other: 'Notification'
+    };
+    return typeMap[type] || 'Notification';
   }
 
   ngOnDestroy(): void {

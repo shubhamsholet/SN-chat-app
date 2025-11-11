@@ -4,6 +4,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validatio
 import { UserService } from '../services/user';
 import { Router } from '@angular/router';
 import { Localstorage } from '../services/localstorage';
+import { NotificationService } from '../services/notification';
 
 @Component({
   selector: 'app-login-register',
@@ -18,25 +19,25 @@ export class LoginRegister {
   registerForm!: FormGroup;
   forgotForm!: FormGroup;
 
-  constructor(private fb: FormBuilder , private userService: UserService,
-     private router : Router, private localStorageService: Localstorage,
-    private cdr: ChangeDetectorRef) {}
+  constructor(private fb: FormBuilder, private userService: UserService,
+    private router: Router, private localStorageService: Localstorage,
+    private cdr: ChangeDetectorRef, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      phoneNumber: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10) ]],
+      phoneNumber: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
       password: ['', [Validators.required, Validators.minLength(3)]]
     });
 
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
-      phoneNumber: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10) ]],
+      phoneNumber: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
       password: ['', [Validators.required, Validators.minLength(3)]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
 
     this.forgotForm = this.fb.group({
-      phoneNumber: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10) ]]
+      phoneNumber: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]]
     });
   }
 
@@ -51,15 +52,15 @@ export class LoginRegister {
     this.currentView = view;
   }
 
- async onLogin() {
+  async onLogin() {
     if (this.loginForm.valid) {
       console.log('✅ Login Data:', this.loginForm.value);
-      await this.userService.getUserByphoneNumber( 'shu@gmail.com'); 
-      const user = await this.userService.getUserByphoneNumber( this.loginForm.value.phoneNumber); 
+      await this.userService.getUserByphoneNumber('shu@gmail.com');
+      const user = await this.userService.getUserByphoneNumber(this.loginForm.value.phoneNumber);
       console.log(user);
 
-      if(user){
-        if(user.data.password === this.loginForm.value.password){
+      if (user) {
+        if (user.data.password === this.loginForm.value.password) {
           console.log('✅ Login Successful');
           this.router.navigate(['/home']);
           this.localStorageService.setItem('user-UID', user.id);
@@ -67,32 +68,42 @@ export class LoginRegister {
           console.log('✅ navigation  Successful');
           this.userService.showToast('User Logged in successfully', 'success');
           this.loginForm.reset();
-        }else{
-        console.log('❌ Invalid phoneNumber or password');
-        this.userService.showToast('Invalid phoneNumber or password', 'error');
-      }
-      }else{
+
+          // Manual notification creation
+          this.notificationService.addNotification({
+            type: 'system',
+            title: 'Welcome!',
+            body: 'Welcome to our app!',
+            metadata: { welcome: true }
+          });
+
+
+        } else {
+          console.log('❌ Invalid phoneNumber or password');
+          this.userService.showToast('Invalid phoneNumber or password', 'error');
+        }
+      } else {
         console.log('❌ User not found');
         this.userService.showToast('User not found', 'error');
-        
+
       }
 
     } else {
       this.loginForm.markAllAsTouched();
     }
-      this.cdr.detectChanges();
+    this.cdr.detectChanges();
   }
 
- async onRegister() {
+  async onRegister() {
     if (this.registerForm.valid) {
       console.log('✅ Register Data:', this.registerForm.value);
-      await this.userService.createUser( this.registerForm.value.name, this.registerForm.value.phoneNumber, this.registerForm.value.password);
+      await this.userService.createUser(this.registerForm.value.name, this.registerForm.value.phoneNumber, this.registerForm.value.password);
       // this.userService.showToast('User Registered successfully', 'success');
-       this.registerForm.reset();
+      this.registerForm.reset();
     } else {
       this.registerForm.markAllAsTouched();
     }
-      this.cdr.detectChanges();
+    this.cdr.detectChanges();
   }
 
   onForgotPassword() {
@@ -102,5 +113,5 @@ export class LoginRegister {
       this.forgotForm.markAllAsTouched();
     }
   }
-  
+
 }
