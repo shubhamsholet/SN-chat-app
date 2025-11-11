@@ -1,0 +1,29 @@
+<div class="card status-card p-3" style="margin-top: 2rem; width: fit-content;">
+    <div class="d-flex align-items-start">
+        <div class="avatar me-3">
+            <!-- simple avatar placeholder -->
+            <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center">
+                <span class="initial">{{ initials }}</span>
+            </div>
+        </div>
+
+
+        <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="mb-0 name">{{ partner.partnerName || name }}</h6>
+                    <small class="text-muted">{{ subText }}</small>
+                </div>
+
+
+                <div class="text-end ms-3 status-area">
+                    <small class="text-muted d-block">{{ partner.lastMessage?.time }}</small>
+                    <div class="icon-wrap mt-1" [innerHTML]="statusIcon"></div>
+                </div>
+            </div>
+
+
+            <p class="mt-2 mb-0 message small text-truncate">{{ partner.lastMessage?.text }}</p>
+        </div>
+    </div>
+</div>

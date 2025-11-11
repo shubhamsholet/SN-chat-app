@@ -1,0 +1,137 @@
+<section class="vh-100 bg-light">
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+
+            <!-- ==== LEFT SIDE IMAGE ==== -->
+            <div class="col-md-9 col-lg-6 col-xl-5 mb-4 mb-md-0 text-center">
+                <img *ngIf="currentView === 'login' || currentView === 'register'"
+                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                    class="img-fluid" alt="Illustration" />
+                <img *ngIf="currentView === 'forgot'"
+                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw1.webp"
+                    class="img-fluid" alt="Forgot Password Image" />
+            </div>
+
+            <!-- ==== RIGHT SIDE FORM ==== -->
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+
+                <!-- ========== LOGIN FORM ========== -->
+                <form *ngIf="currentView === 'login'" [formGroup]="loginForm" (ngSubmit)="onLogin()"
+                    class="p-4 shadow rounded bg-white">
+                    <h3 class="mb-4 text-center">Login</h3>
+
+                    <div class="form-floating mb-3">
+                        <input type="number" id="loginphoneNumber" class="form-control" placeholder="Phone Number"
+                            formControlName="phoneNumber" />
+                        <label for="loginphoneNumber">Phone Number </label>
+                        <small class="text-danger"
+                            *ngIf="loginForm.get('phoneNumber')?.invalid && loginForm.get('phoneNumber')?.touched">
+                            Valid phone Number required
+                        </small>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Password"
+                            formControlName="password" />
+                        <label for="loginPassword">Password</label>
+                        <small class="text-danger"
+                            *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                            Minimum 3 characters
+                        </small>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input me-2" type="checkbox" id="rememberMe" />
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <!-- <a href="#" (click)="switchView('forgot')" class="text-body small">Forgot password?</a> -->
+                    </div>
+
+                    <div class="d-grid">
+                        <!-- LOGIN -->
+                        <button type="submit" class="btn btn-primary btn-lg"
+                            [disabled]="!loginForm.valid">Login</button>
+                    </div>
+
+                    <p class="small fw-bold text-center mt-3 mb-0">
+                        Don’t have an account?
+                        <a href="#" (click)="switchView('register')" class="link-danger">Register</a>
+                    </p>
+                </form>
+
+                <!-- ========== REGISTER FORM ========== -->
+                <form *ngIf="currentView === 'register'" [formGroup]="registerForm" (ngSubmit)="onRegister()"
+                    class="p-4 shadow rounded bg-white">
+                    <h3 class="mb-4 text-center">Create an Account</h3>
+
+                    <div class="form-floating mb-3">
+                        <input type="text" id="registerName" class="form-control" placeholder="Full Name"
+                            formControlName="name" />
+                        <label for="registerName">Full Name</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="number" id="registerphoneNumber" class="form-control" placeholder="Phone Number"
+                            formControlName="phoneNumber" />
+                        <label for="registerphoneNumber">Phone Number </label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="password" id="registerPassword" class="form-control" placeholder="Password"
+                            formControlName="password" />
+                        <label for="registerPassword">Password(min 3 char)</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="password" id="registerConfirmPassword" class="form-control"
+                            placeholder="Confirm Password" formControlName="confirmPassword" />
+                        <label for="registerConfirmPassword">Confirm Password</label>
+
+                        <small class="text-danger"
+                            *ngIf="registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched">
+                            Passwords do not match
+                        </small>
+
+                    </div>
+
+                    <div class="d-grid">
+                        <!-- REGISTER -->
+                        <button type="submit" class="btn btn-success btn-lg"
+                            [disabled]="!registerForm.valid">Register</button>
+                    </div>
+
+                    <p class="small fw-bold text-center mt-3 mb-0">
+                        Already have an account?
+                        <a href="#" (click)="switchView('login')" class="link-primary">Login</a>
+                    </p>
+                </form>
+
+                <!-- ========== FORGOT PASSWORD FORM ========== -->
+                <form *ngIf="currentView === 'forgot'" [formGroup]="forgotForm" (ngSubmit)="onForgotPassword()"
+                    class="p-4 shadow rounded bg-white">
+                    <h3 class="mb-3 text-center">Forgot Password</h3>
+                    <p class="small text-muted text-center mb-4">Enter your registered Phone Number to reset your password.</p>
+
+                    <div class="form-floating mb-3">
+                        <input type="number" id="forgotphoneNumber" class="form-control" placeholder="Phone Number"
+                            formControlName="phoneNumber" />
+                        <label for="forgotphoneNumber">Phone Number  </label>
+                    </div>
+
+                    <div class="d-grid">
+                        <!-- FORGOT PASSWORD -->
+                        <button type="submit" class="btn btn-warning btn-lg" [disabled]="!forgotForm.valid">Send Reset
+                            Link</button>
+                    </div>
+
+                    <p class="small fw-bold text-center mt-3 mb-0">
+                        Remembered your password?
+                        <a href="#" (click)="switchView('login')" class="link-primary">Login</a>
+                    </p>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>

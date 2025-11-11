@@ -1,0 +1,42 @@
+.status-card{
+border-radius: 12px;
+box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+border: 1px solid rgba(0,0,0,0.04);
+background: #fff;
+max-width: 520px;
+}
+.avatar > .rounded-circle{
+width:56px;
+height:56px;
+border-radius:50%;
+}
+.initial{
+font-weight:700;
+color: #fff;
+}
+.name{
+font-size: 1rem;
+font-weight:600;
+}
+.message{
+color: #333;
+}
+.status-area .icon-wrap svg{
+width:20px;
+height:20px;
+vertical-align:middle;
+}
+/* blue double-tick for "read" - we provide a subtle glow */
+.icon-blue{
+filter: drop-shadow(0 1px 0 rgba(0,0,0,0.04));
+}
+/* processing spinner small */
+.processing-spin{
+width:18px;
+height:18px;
+border:2px solid rgba(0,0,0,0.1);
+border-top-color: rgba(0,0,0,0.4);
+border-radius:50%;
+animation: spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}

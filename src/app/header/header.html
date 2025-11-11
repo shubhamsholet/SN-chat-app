@@ -1,0 +1,47 @@
+<header class="navbar navbar-expand-lg navbar-light bg-light shadow-sm px-3 py-2">
+  <div class="container-fluid">
+
+    <!-- Logo -->
+    <div class="navbar-brand d-flex align-items-center" (click)="goToHome()">
+      <!-- <img src="assets/logo.png" alt="Logo" width="40" height="40" class="me-2"> -->
+      <span class="fw-bold fs-5">SN-chat</span>
+    </div>
+
+
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+
+    <!-- Right side: Search + Logout -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+      <form class="d-flex position-relative me-2 mt-2 mt-lg-0">
+        <div class="position-relative w-100">
+          <input class="form-control me-2" type="number" placeholder="Search..." aria-label="Search"
+            [(ngModel)]="searchValue" name="searchValue" (input)="onInputChange()" />
+
+          <!-- Dropdown results -->
+          <ul class="list-group position-absolute w-100 mt-1 shadow-sm" *ngIf="filteredUsers.length > 0 && showDropdown"
+            style="z-index: 1000;">
+            <li *ngFor="let user of filteredUsers" class="list-group-item list-group-item-action"
+              (click)="selectUser(user)">
+              <div class="fw-bold">{{ user.data.name }}</div>
+              <small class="text-muted">{{ user.data.phone }}</small>
+            </li>
+          </ul>
+        </div>
+      </form>
+      <span class="cursor-pointer me-3" (click)="goToNotifications()">
+        <i class="fa fa-bell" aria-hidden="true"></i>
+      </span>
+      <button (click)="logout()" class="btn btn-danger ms-lg-2 mt-2 mt-lg-0">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </button>
+    </div>
+
+
+  </div>
+</header>

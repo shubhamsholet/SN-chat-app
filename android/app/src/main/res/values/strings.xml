@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SN Chat App</string>
+    <string name="title_activity_main">SN Chat App</string>
+    <string name="package_name">com.shubham.snchatapp</string>
+    <string name="custom_url_scheme">com.shubham.snchatapp</string>
+</resources>

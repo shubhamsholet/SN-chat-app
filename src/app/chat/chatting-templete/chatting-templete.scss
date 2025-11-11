@@ -1,0 +1,96 @@
+@import '../../../assets/global.scss';
+
+/* ✅ Chat Header Styles */
+.chat-header {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 1px solid #dee2e6;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+
+.chat-container {
+height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f6f7;
+  position: relative;
+  padding-bottom: 60px;
+}
+
+/* Scrollable chat area */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #e9ecef;
+  padding-bottom: 80px; /* space above fixed input */
+}
+
+/* Chat bubbles */
+.chat-bubble {
+  max-width: 70%;
+  word-wrap: break-word;
+
+  &.me {
+    background-color: #d1e7dd; /* light green */
+    border-top-right-radius: 0;
+  }
+
+  &.other {
+    background-color: #ffffff;
+    border-top-left-radius: 0;
+  }
+}
+
+/* Fixed bottom input bar */
+.chat-input {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 10;
+}
+
+.chat-input input {
+  border-radius: 25px;
+}
+
+/* For small screens */
+@media (max-width: 768px) {
+  .chat-bubble {
+    max-width: 85%;
+  }
+}
+ 
+  
+
+  // scrool down button
+
+  .scroll-down-btn {
+  position: absolute;
+  bottom: 80px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 20;
+}
+
+.scroll-down-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
