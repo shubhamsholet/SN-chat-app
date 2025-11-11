@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Header } from "../header/header";
 import { ChatHome } from "../chat/chat-home/chat-home";
-import { Notification } from '../services/notification';
+import {  NotificationService } from '../services/notification';
 import { Localstorage } from '../services/localstorage';
 
 @Component({
@@ -13,7 +13,7 @@ import { Localstorage } from '../services/localstorage';
 export class HomePage implements OnInit {
 
   constructor(
-     private notificationService: Notification,
+     private notificationService: NotificationService,
     private localStorage: Localstorage
   ) { }
 

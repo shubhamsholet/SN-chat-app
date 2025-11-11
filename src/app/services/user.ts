@@ -4,7 +4,7 @@ import { Auth } from '@angular/fire/auth';
 import { from, Observable } from 'rxjs';
 import { LocalNotifications } from '@capacitor/local-notifications';
 export interface User {
-  id?: string;     // Firestore auto ID
+  id?: string;
   name: string;
   password: string;
 }
@@ -15,15 +15,9 @@ export interface User {
 export class UserService {
   private firestore = inject(Firestore);
   usersCollection: CollectionReference<DocumentData> = collection(this.firestore, 'users');
-  /**
-   * Create a new user document in Firestore with an auto-generated ID.
-   * The document will be stored in the 'users' collection.
-   */
+
   async createUser(name: string, phoneNumber: number, password: string): Promise<string> {
     try {
-      // Explicitly type the collection for better IntelliSense
-
-
       console.log('✅ usersCollection path:', this.usersCollection.path);
       console.log('📦 Creating user:', { name, phoneNumber, password });
 
@@ -69,7 +63,6 @@ export class UserService {
     }
   }
 
-
   async updateUser(userId: string, data: Record<string, any>): Promise<void> {
     try {
       const userDocRef = doc(this.firestore, `users/${userId}`);
@@ -85,8 +78,6 @@ export class UserService {
       throw error;
     }
   }
-
-
   async deleteUserByphoneNumber(phoneNumber: number): Promise<boolean> {
     try {
       const q = query(this.usersCollection, where('phoneNumber', '==', phoneNumber));
@@ -112,7 +103,6 @@ export class UserService {
     }
   }
 
-  // In user.service.ts
 
   async getAllUsers(): Promise<{ id: string; data: User }[]> {
     try {
@@ -152,7 +142,6 @@ export class UserService {
     }
   }
 
-
   async showToast(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info'): Promise<void> {
     // Create toast container if not exists
     let toastContainer = document.getElementById('toast-container');
@@ -190,12 +179,8 @@ export class UserService {
     });
   }
 
-
   listenToUser(uid: string): Observable<User | undefined> {
     const userDocRef = doc(this.firestore, `users/${uid}`);
     return docData(userDocRef, { idField: 'id' }) as Observable<User | undefined>;
   }
-
- 
-
 }

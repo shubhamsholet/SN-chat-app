@@ -1,1 +1,31 @@
  @import '../../assets/global.scss';
+
+
+ // Add to your notification-shell.scss
+.security-alert {
+  border-left: 4px solid #ff4444;
+  background: rgba(255, 68, 68, 0.05);
+}
+
+.security-title {
+  color: #ff4444;
+}
+
+.security-badge {
+  background: #ff4444;
+}
+
+.login-info {
+  border-left: 4px solid #ffa726;
+  background: rgba(255, 167, 38, 0.05);
+}
+
+.notification-location {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  
+  &:before {
+    content: "📍 ";
+  }
+}

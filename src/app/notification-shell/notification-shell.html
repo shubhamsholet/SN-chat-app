@@ -1,4 +1,120 @@
-<app-header></app-header>
-<div class="p-4">
-    <p>notification-shell works!</p>
+<!-- <app-header [title]="'Notifications'" [showBackButton]="true"></app-header> -->
+<app-header [title]="'Notifications'" ></app-header>
+
+<div class="notification-container">
+  <div class="notification-header">
+    <h2>Notifications</h2>
+    <button 
+      class="btn-clear-all" 
+      (click)="clearAllNotifications()"
+      [disabled]="notifications.length === 0">
+      Clear All
+    </button>
+  </div>
+
+  <!-- Non-Message Notifications Section -->
+  <div class="notification-section" *ngIf="nonMessageNotifications.length > 0">
+    <h3 class="section-title">
+      Other Notifications
+      <span class="badge" *ngIf="unreadNonMessageCount > 0">
+        {{ unreadNonMessageCount }}
+      </span>
+    </h3>
+    
+    <div class="notification-list">
+      <div 
+        *ngFor="let notification of nonMessageNotifications" 
+        class="notification-item"
+        [class.unread]="!notification.read"
+        [class.system]="notification.type === 'system'"
+        [class.friend-request]="notification.type === 'friend_request'"
+        [class.other]="notification.type === 'other'"
+        (click)="markAsRead(notification)">
+        
+        <!-- <div class="notification-icon">
+          <span [class]="getNotificationIcon(notification.type)"></span>
+        </div> -->
+        
+        <div class="notification-content">
+          <div class="notification-title">{{ notification.title }}</div>
+          <div class="notification-body">{{ notification.body }}</div>
+          <div class="notification-time">
+            {{ formatTimestamp(notification.timestamp) }}
+          </div>
+        </div>
+        
+        <div class="notification-status">
+          <span class="unread-dot" *ngIf="!notification.read"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="nonMessageNotifications.length === 0">
+    <div class="empty-icon">🔔</div>
+    <h3>No notifications</h3>
+    <p>You're all caught up!</p>
+  </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+// Example usage in other components
+export class SomeComponent {
+  constructor(private notificationService: Notification) {}
+
+  // System notification
+  showSystemNotification(): void {
+    this.notificationService.createNonMessageNotification({
+      type: 'system',
+      title: 'System Update',
+      body: 'Your app has been updated to the latest version',
+      metadata: {
+        version: '1.2.0',
+        updateType: 'minor'
+      }
+    });
+  }
+
+  // Friend request notification
+  showFriendRequestNotification(): void {
+    this.notificationService.createNonMessageNotification({
+      type: 'friend_request',
+      title: 'Friend Request',
+      body: 'John Doe sent you a friend request',
+      metadata: {
+        fromUserId: '12345',
+        fromUserName: 'John Doe'
+      }
+    });
+  }
+
+  // Custom notification
+  showCustomNotification(): void {
+    this.notificationService.createNonMessageNotification({
+      type: 'other',
+      title: 'Reminder',
+      body: 'Don\'t forget your meeting at 3 PM',
+      metadata: {
+        reminderId: 'rem_123',
+        meetingTime: '15:00'
+      }
+    });
+  }
+}
+  
+-->

@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Header } from "./header/header";
 import { Localstorage } from './services/localstorage';
 import { filter } from 'rxjs';
-import { Notification } from './services/notification';
+import {  NotificationService } from './services/notification';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ import { Notification } from './services/notification';
 export class App implements OnInit {
   protected title = 'SN-Chat-app';
   isLoggedIn: boolean = false;
-  constructor(private localservice: Localstorage, private router: Router, private notificationService: Notification) { }
+  constructor(private localservice: Localstorage, private router: Router, private notificationService: NotificationService) { }
 
   async ngOnInit() {
     // 🔹 Initial check
