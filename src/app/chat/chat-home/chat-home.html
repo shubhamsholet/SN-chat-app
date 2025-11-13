@@ -1,24 +1,22 @@
 <app-header (userSelected)="onUserSelected($event)"></app-header> 
 
 <div class="p-4">
-<!-- Loader -->
-<div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 80vh;">
-  <span class="loader"></span> 
-</div>
-<ng-container *ngIf="!isLoading">
-@if (listOfChatPersons.length > 0) {
-    <div *ngFor="let partner of listOfChatPersons">
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <span class="loader"></span> 
+  </div>
+  
+  <ng-container *ngIf="!isLoading">
+    @if (listOfChatPersons.length > 0) {
+      <div *ngFor="let partner of listOfChatPersons">
         <div style="max-width: 400px;">
-            <app-chat-card  [partner]="partner" style="width: 100%;"
-                (click)="goToChattingTemplete(partner)">
-            </app-chat-card>
+          <app-chat-card [partner]="partner" style="width: 100%;"
+            (click)="goToChattingTemplete(partner)">
+          </app-chat-card>
         </div>
-    </div>
-} @else {
-    <ng-template>
-        <h3>No chats yet</h3>
-    </ng-template>
-}
-</ng-container>
-
+      </div>
+    } @else {
+      <h3>No chats yet</h3>
+    }
+  </ng-container>
 </div>

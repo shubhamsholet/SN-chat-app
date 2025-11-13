@@ -13,7 +13,7 @@ import { NotificationService } from '../services/notification';
   styleUrl: './login-register.scss',
 })
 export class LoginRegister {
-  currentView: 'login' | 'register' | 'forgot' = 'register';
+  currentView: 'login' | 'register' | 'forgot' = 'login';
 
   loginForm!: FormGroup;
   registerForm!: FormGroup;

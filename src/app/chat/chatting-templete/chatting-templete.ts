@@ -49,6 +49,18 @@ export class ChattingTemplete implements OnInit {
       const updatedPartner = await this.userService.getUserById(partnerUID);
       this.partner = updatedPartner;
       console.log('🔄 Updated partner from Firestore:', this.partner);
+
+      if (!this.partner.data.allChatList) {
+        await this.userService.updateUser(partnerUID, {
+          allChatList: this.allChatList
+        });
+        console.log('allChatList is added to partner user');
+         const updatedPartner = await this.userService.getUserById(partnerUID);
+      this.partner = updatedPartner;
+       console.log('🔄 Updated partner from Firestore:', this.partner);
+      } else {
+        console.log('currentuser allchatlist already exist')
+      }
     } else {
       console.log('partner is not found');
     }
