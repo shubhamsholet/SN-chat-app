@@ -19,7 +19,7 @@
 
 <div class="chat-container d-flex flex-column">
   <!-- Chat messages -->
-  <div class="chat-messages flex-grow-1 p-3">
+  <div class="chat-messages flex-grow-1 p-3" #scrollContainer (scroll)="onScroll()">
 
 
    <!-- Loader while data is loading -->

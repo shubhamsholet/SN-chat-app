@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Localstorage } from '../../services/localstorage';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './chatting-templete.html',
   styleUrl: './chatting-templete.scss',
 })
-export class ChattingTemplete implements OnInit {
+export class ChattingTemplete implements OnInit, AfterViewChecked {
   partner: any;
   currentUser: any;
   message: string = '';
@@ -29,7 +29,8 @@ export class ChattingTemplete implements OnInit {
   noMessageFound: boolean = false;
   isLoading: boolean = true; // New loading state
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-
+  private scrollThreshold = 100; // pixels from bottom to consider "near bottom"
+  private shouldAutoScroll = true;
 
   // To hold subscribed user data
   userData: User | undefined;
@@ -55,9 +56,9 @@ export class ChattingTemplete implements OnInit {
           allChatList: this.allChatList
         });
         console.log('allChatList is added to partner user');
-         const updatedPartner = await this.userService.getUserById(partnerUID);
-      this.partner = updatedPartner;
-       console.log('🔄 Updated partner from Firestore:', this.partner);
+        const updatedPartner = await this.userService.getUserById(partnerUID);
+        this.partner = updatedPartner;
+        console.log('🔄 Updated partner from Firestore:', this.partner);
       } else {
         console.log('currentuser allchatlist already exist')
       }
@@ -101,8 +102,13 @@ export class ChattingTemplete implements OnInit {
 
 
     // current chat messages
-    this.fetchCurrentChatMessages()
+    this.fetchCurrentChatMessages();
+      // 🔥 Scroll after initial page load
+  setTimeout(() => {
+    this.triggerScroll();
+  }, 200);
     this.cdr.detectChanges();
+    
   }
 
 
@@ -123,18 +129,22 @@ export class ChattingTemplete implements OnInit {
         console.log('✅ Chat found:', currentChat);
         this.currentChatMessages = currentChat;
         console.log('this.currentChatMessages', this.currentChatMessages)
-          this.noMessageFound = false;
+        this.noMessageFound = false;
       } else {
         // Chat doesn't exist, create new chat entry
         console.log('No existing chat AAAAAAAAAA');
-          this.noMessageFound = true;
+        this.noMessageFound = true;
       }
     } else {
       this.currentChatMessages = null;
       this.noMessageFound = true;
     }
-        this.isLoading = false;
+    this.isLoading = false;
     this.cdr.detectChanges();
+     // 🔥 CRITICAL: Scroll after data is loaded and DOM is updated
+  setTimeout(() => {
+    this.triggerScroll();
+  }, 100);
   }
 
 
@@ -253,22 +263,44 @@ export class ChattingTemplete implements OnInit {
     console.log('Message:', this.message);
     this.pushMessage(this.message);
     this.message = '';
-    this.cdr.detectChanges();
-    setTimeout(() => this.scrollToBottom(), 0);
+    this.cdr.detectChanges(); 
   }
 
-  ngAfterViewChecked() {
-    this.scrollToBottom();
-    this.cdr.detectChanges();
+ 
+
+private scrollToBottom() {
+  try {
+    if (this.scrollContainer) {
+      const element = this.scrollContainer.nativeElement;
+      // Use requestAnimationFrame for smoother scrolling
+      requestAnimationFrame(() => {
+        element.scrollTop = element.scrollHeight;
+      });
+    }
+  } catch (err) {
+    console.error('Scroll error:', err);
   }
+}
 
-  private scrollToBottom() {
-    const container = document.querySelector('.chat-messages');
-    if (container) container.scrollTop = container.scrollHeight;
-    this.cdr.detectChanges();
+// Call this when new messages arrive
+triggerScroll() {
+  this.shouldAutoScroll = true;
+  this.scrollToBottom();
+}
+
+ngAfterViewChecked() {
+  
+}
+ 
+
+ // Add this missing method:
+  onScroll() {
+    if (this.scrollContainer) {
+      const element = this.scrollContainer.nativeElement;
+      const atBottom = element.scrollHeight - element.scrollTop - element.clientHeight < this.scrollThreshold;
+      this.shouldAutoScroll = atBottom;
+    }
   }
-
-
   async onUserChanged(user: User | undefined) {
     console.log('⚡ Detected change, trigger action here!');
     this.fetchCurrentChatMessages();
