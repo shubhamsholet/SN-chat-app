@@ -37,22 +37,22 @@ export class ChatHome implements OnInit {
 
   async ngOnInit() {
     console.log('Is Logged In:', this.isLoggedIn);
-      // Show loader immediately
+    // Show loader immediately
     this.isLoading = true;
     try {
       this.users = await this.userService.getAllUsers();
-      this.fetchChatPartners() 
+      this.fetchChatPartners()
     } catch (error) {
       console.error('Error loading users:', error);
     } finally {
       this.isLoading = false;
-        this.cdr.detectChanges();
+      this.cdr.detectChanges();
     }
   }
 
   async fetchChatPartners() {
     const currentuserUID = this.localservice.getItem('user-UID') as string;
-        
+
     if (!currentuserUID) {
       this.isLoading = false;
       return;
@@ -69,8 +69,12 @@ export class ChatHome implements OnInit {
         partnerUID: chat.partnerUID,
         lastMessage: chat.lastMeassage || "(no message)"
       }));
-      this.listOfChatPersons = chatSummaries
-      console.log('this.listOfChatPersons', this.listOfChatPersons)
+      // this.listOfChatPersons = chatSummaries
+      this.listOfChatPersons = chatSummaries.sort((a: any, b: any) => {
+        return new Date(b.lastMessage.time).getTime() - new Date(a.lastMessage.time).getTime();
+      });
+
+      console.log('this.listOfChatPersons', this.listOfChatPersons); 
     }
 
 
